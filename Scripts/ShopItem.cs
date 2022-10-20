@@ -28,7 +28,7 @@ public class ShopItem : MonoBehaviour
     public string descriptionText;
     public bool isPassive;
     public bool isMultiplier;
-    public float startValue;
+    public int startValue;
     public int startCost;
 
     public Font font;
@@ -37,8 +37,8 @@ public class ShopItem : MonoBehaviour
 
     public GameObject canvas;
 
-    private int currentCost;
-    private float currentValue;
+    public int currentCost;
+    public int currentValue;
 
     private UIText description;
     private UIText cost;
@@ -58,7 +58,7 @@ public class ShopItem : MonoBehaviour
     void Start()
     {
         currentCost = startCost;
-        currentValue = startValue;
+        currentValue = isMultiplier ? 1 : 0;
 
         description = new UIText(canvas, 6, Color.white, font);
         description.text.text = descriptionText;
@@ -77,7 +77,7 @@ public class ShopItem : MonoBehaviour
     }
 
     void updateText() {
-        cost.text.text = "$" + nextCost();
+        cost.text.text = "$" + currentCost;
         if (isMultiplier) {
             bonus.text.text = currentValue + "x > " + nextValue() + "x";
         }
@@ -89,10 +89,10 @@ public class ShopItem : MonoBehaviour
         }
     }
 
-    float nextValue() {
+    int nextValue() {
         if (isMultiplier) {
             char t = currentValue.ToString()[0];
-            return t == '1' || t == '5' ? currentValue * 2 : currentValue * 5 / 2;
+            return t == '0' ? startValue : t == '1' || t == '5' ? currentValue * 2 : currentValue * 5 / 2;
         }
         return currentValue + startValue;
     }
@@ -103,7 +103,7 @@ public class ShopItem : MonoBehaviour
             return Mathf.RoundToInt(Mathf.Exp(lv) * startCost);
         }
         else {
-            int lv = (int)currentValue / (int)startValue;
+            int lv = currentValue / startValue + 1;
             return lv * startCost;
         }
     }
@@ -126,9 +126,7 @@ public class ShopItem : MonoBehaviour
         }
 
         if (Input.GetMouseButtonDown(0) && isHovering && canBuy) {
-            grilla.money -= currentCost;
-            currentValue = nextValue();
-            updateText();
+            buy();
         }
 
         if (canBuy && grilla.money < currentCost) {
@@ -136,6 +134,22 @@ public class ShopItem : MonoBehaviour
             bonus.text.color = Color.red;
         }
 
+    }
+
+    void buy() {
+        if (isMultiplier) {
+            grilla.multiplier = nextValue();
+        }
+        else if (isPassive) {
+            grilla.passiveDamage += nextValue() - currentValue;
+        }
+        else {
+            grilla.clickDamage += nextValue() - currentValue;
+        }
+        grilla.money -= currentCost;
+        currentValue = nextValue();
+        currentCost = nextCost();
+        updateText();
     }
 
     bool isHovering {

@@ -11,13 +11,19 @@ public class Grilla : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        clickDamage = 1;
+        passiveDamage = 0;
+        multiplier = 1;
     }
 
     private bool hovering => ((Vector2)(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position)).magnitude <= 2.5;
 
     private bool mDown;
-	private int _money = 0;
+	public int _money = 0;
+
+    public int clickDamage;
+    public int passiveDamage;
+    public int multiplier;
 
     public int money {
         get => _money;
@@ -44,12 +50,22 @@ public class Grilla : MonoBehaviour
         transform.localScale = Vector2.one * 5.0f * (mDown ? 1.05f : 1.0f);
     }
 
-    void addPassiveMoney() {
+    float timeCoolDown = 0;
 
+    void addPassiveMoney() {
+        while (timeCoolDown <= 0) {
+            addMoney(passiveDamage);
+            timeCoolDown += 1f;
+        }
+        timeCoolDown -= Time.deltaTime;
     }
 
     void addMoney() {
-		money++;
-		text.text = "Money: $" + money;
+        addMoney(clickDamage);
+    }
+
+    void addMoney(int addedMoney) {
+        money += addedMoney * multiplier;
+        text.text = "Money: $" + money;
     }
 }
