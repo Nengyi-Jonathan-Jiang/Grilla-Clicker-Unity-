@@ -17,7 +17,15 @@ public class Grilla : MonoBehaviour
     private bool hovering => ((Vector2)(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position)).magnitude <= 2.5;
 
     private bool mDown;
-	private int money = 0;
+	private int _money = 0;
+
+    public int money {
+        get => _money;
+        set {
+            _money = value;
+            text.text = "Money: $" + _money;
+        }
+    }
 	
     // Update is called once per frame
     void Update()

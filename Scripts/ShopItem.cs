@@ -67,7 +67,7 @@ public class ShopItem : MonoBehaviour
         cost = new UIText(canvas, 4, Color.yellow, font);
         cost.transform.sizeDelta = new Vector2(66, 8);
 
-        bonus = new UIText(canvas, 4, Color.green, font);
+        bonus = new UIText(canvas, 4, Color.red, font);
         bonus.transform.sizeDelta = new Vector2(66, 8);
         bonus.text.alignment = TextAnchor.UpperRight;
 
@@ -108,6 +108,8 @@ public class ShopItem : MonoBehaviour
         }
     }
 
+    bool canBuy = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -118,10 +120,22 @@ public class ShopItem : MonoBehaviour
             position -= new Vector2(0, Time.deltaTime);
         }
 
-        if (Input.GetMouseButtonDown(0) && isHovering) {
+        if (!canBuy && grilla.money >= currentCost) {
+            canBuy = true;
+            bonus.text.color = Color.green;
+        }
+
+        if (Input.GetMouseButtonDown(0) && isHovering && canBuy) {
+            grilla.money -= currentCost;
             currentValue = nextValue();
             updateText();
         }
+
+        if (canBuy && grilla.money < currentCost) {
+            canBuy = false;
+            bonus.text.color = Color.red;
+        }
+
     }
 
     bool isHovering {
