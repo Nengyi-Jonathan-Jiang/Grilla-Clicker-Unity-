@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1487564280397889177}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 2, z: 1}
+  m_LocalScale: {x: 7.1, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -97,8 +97,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionText: 
   isPassive: 0
-  startValue: 0
-  startCost: 0
+  isMultiplier: 0
+  startValueString: 
+  startCostString: 
   font: {fileID: 12800000, guid: dec3776ea45538d41a0f39228664e5da, type: 3}
   grilla: {fileID: 0}
   canvas: {fileID: 0}

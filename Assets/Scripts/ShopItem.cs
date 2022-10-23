@@ -23,6 +23,7 @@ class UIText {
         text.color = text_color;
         text.font = font;
         text.transform.position = Vector3.zero;
+        text.horizontalOverflow = HorizontalWrapMode.Overflow;
     }
 }
 
@@ -55,7 +56,7 @@ public class ShopItem : MonoBehaviour
     private Vector2 position  => transform.position;
 
     public void updateTextPosition() {
-        description.transform.anchoredPosition = 10 * position + new Vector2(0, 6);
+        description.transform.anchoredPosition = 10 * position + new Vector2(0, 5);
         cost.transform.anchoredPosition = 10 * position + new Vector2(0, -6);
         bonus.transform.anchoredPosition = 10 * position + new Vector2(0, -6);
     }
@@ -70,13 +71,13 @@ public class ShopItem : MonoBehaviour
 
         description = new UIText(canvas, 6, Color.white, font);
         description.text.text = descriptionText;
-        description.transform.sizeDelta = new Vector2(66, 8);
+        description.transform.sizeDelta = new Vector2(68, 8);
 
         cost = new UIText(canvas, 4, Color.yellow, font);
-        cost.transform.sizeDelta = new Vector2(66, 8);
+        cost.transform.sizeDelta = new Vector2(68, 8);
 
         bonus = new UIText(canvas, 4, Color.red, font);
-        bonus.transform.sizeDelta = new Vector2(66, 8);
+        bonus.transform.sizeDelta = new Vector2(68, 8);
         bonus.text.alignment = TextAnchor.UpperRight;
 
         updateText();
@@ -170,7 +171,7 @@ public class ShopItem : MonoBehaviour
         if (num < 10000)
             return num.ToString();
 
-        int digits = (int)Math.Floor(BigInteger.Log10(num));
+        int digits = num.ToString().Length - 1;
 
         int sigDigits = (int)(num / BigInteger.Pow(10, digits - 2));
 

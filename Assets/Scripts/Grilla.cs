@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class Grilla : MonoBehaviour
 {
     public GameObject bananPrefab;
-	public Text text;
+	public Text moneyText;
+    public Text infoText;
 
     float lastFrameTime, deltaTime;
 
@@ -25,6 +26,7 @@ public class Grilla : MonoBehaviour
 
     private bool mDown;
 	public BigInteger _money = 0;
+    public BigInteger totalMoneyEarned;
 
     public BigInteger clickDamage;
     public BigInteger passiveDamage;
@@ -34,8 +36,15 @@ public class Grilla : MonoBehaviour
         get => _money;
         set {
             _money = value;
-            text.text = "Bananas: " + ShopItem.fancyNumber(_money);
+            updateText();
         }
+    }
+
+    void updateText() {
+        infoText.text = "Bananas per click: " + ShopItem.fancyNumber(clickDamage * multiplier) + "\n" +
+                        "Bananas per second: " + ShopItem.fancyNumber(passiveDamage * multiplier) + "\n" +
+                        "Total banana count: " + ShopItem.fancyNumber(totalMoneyEarned);
+        moneyText.text = "Bananas: " + ShopItem.fancyNumber(_money);
     }
 
     // Update is called once per frame
@@ -73,6 +82,7 @@ public class Grilla : MonoBehaviour
     }
 
     void addMoney(BigInteger addedMoney) {
+        totalMoneyEarned += addedMoney * multiplier;
         money += addedMoney * multiplier;
     }
 }
